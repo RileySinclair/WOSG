@@ -9,6 +9,7 @@ from datetime import datetime
 import discord
 from dotenv import load_dotenv
 
+<<<<<<< HEAD
 
 class VoiceTimer:
     def __init__(self, voice_state):
@@ -18,11 +19,18 @@ class VoiceTimer:
 
 list_of_commands = [';;serverbooster', ';;custommatch', ';;ashley', ';;ally', ';;admin']
 
+=======
+list_of_commands = [';;serverbooster', ';;custommatch', ';;ashley', ';;ally', ';;admin']
+
+>>>>>>> 2a115f85e9cb726224d758e481f39ce5f91cceae
 channel_list = ['tsu-the-bot']
 list_of_giveaways = {'serverbooster': ['Server Boosters', 'server booster'], 'custommatch': ['Custom Match'],
                      'ally': ['Allies', 'ally'], 'ashley': ['Ashleys', 'ashley'], 'admin': ['Admins', 'admin']}
 
+<<<<<<< HEAD
 dict_of_voice_times = {}
+=======
+>>>>>>> 2a115f85e9cb726224d758e481f39ce5f91cceae
 dict_of_members = {}
 dict_of_nicknames = {}
 exemptions = ['Tsuvarskyei', 'LunaVolpe']
@@ -71,7 +79,10 @@ def populate_list(key):
         for each in custom_match:
             if each not in exemptions:
                 list_of_participants.append(each.display_name)
+<<<<<<< HEAD
 
+=======
+>>>>>>> 2a115f85e9cb726224d758e481f39ce5f91cceae
     else:
         for each in dict_of_members:
             if list_of_giveaways.get(key)[1] in [y.name.lower() for y in dict_of_members.get(each).roles]:
@@ -124,8 +135,12 @@ async def on_ready():
             if dict_of_members.get(each) not in exemptions:
                 exemptions.append(dict_of_members.get(each))
 
+<<<<<<< HEAD
     for each in dict_of_members:
         dict_of_voice_times[each] = VoiceTimer(dict_of_members.get(each).voice)
+=======
+
+>>>>>>> 2a115f85e9cb726224d758e481f39ce5f91cceae
 
     print(f'{client.user.name} has connected to Discord!')
 
@@ -156,6 +171,7 @@ async def on_message(message):
     await giveaway(key, message, number)
 
 
+<<<<<<< HEAD
 # @client.event
 # async def on_voice_state_update(member, before, after):
 #     if after.channel:
@@ -187,5 +203,7 @@ async def on_voice_state_update(member, before, after):
 
 
 
+=======
+>>>>>>> 2a115f85e9cb726224d758e481f39ce5f91cceae
 if __name__ == "__main__":
     client.run(token)
