@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-# bot.py
 import os
 import re
 from random import randint
@@ -11,12 +9,17 @@ from dotenv import load_dotenv
 
 
 class VoiceTimer:
-    def __init__(self, voice_state):
-        self.active = True if voice_state else False
-        self.total_time = 0
+    def __init__(self):
+        self.total_time = datetime.now() - datetime.now()
+        self.start_time = None
+
+    def timer_begin(self):
+        self.start_time = datetime.now()
+
+    def timer_end(self):
+        self.total_time += datetime.now() - self.start_time
 
 
-list_of_commands = [';;serverbooster', ';;custommatch', ';;ashley', ';;ally', ';;admin']
 list_of_commands = [';;serverbooster', ';;custommatch', ';;ashley', ';;ally', ';;admin']
 channel_list = ['tsu-the-bot']
 list_of_giveaways = {'serverbooster': ['Server Boosters', 'server booster'], 'custommatch': ['Custom Match'],
@@ -123,10 +126,10 @@ async def on_ready():
             if dict_of_members.get(each) not in exemptions:
                 exemptions.append(dict_of_members.get(each))
 
-
     for each in dict_of_members:
-        dict_of_voice_times[each] = VoiceTimer(dict_of_members.get(each).voice)
-
+        dict_of_voice_times[each] = VoiceTimer()
+        if dict_of_members.get(each).voice:
+            dict_of_voice_times.get(each).timer_begin()
 
     print(f'{client.user.name} has connected to Discord!')
 
@@ -157,32 +160,16 @@ async def on_message(message):
     await giveaway(key, message, number)
 
 
-
-# @client.event
-# async def on_voice_state_update(member, before, after):
-#     if after.channel:
-#         if not before.channel:
-#             if len(dict_of_voice_times.get(member.name)) == 0:
-#                 dict_of_voice_times.get(member.name).append(datetime.now())
-#             else:
-#                 dict_of_voice_times.get(member.name)[0] = datetime.now()
-#     else:
-#         if before.channel:
-#             if len(dict_of_voice_times.get(member.name)) == 0:
-#                 return
-#             elif len(dict_of_voice_times.get(member.name)) == 1:
-#                 dict_of_voice_times.get(member.name).append(datetime.now() - dict_of_voice_times.get(member.name)[0])
-#                 print(dict_of_voice_times.get(member.name)[1])
-#             else:
-#                 difference = datetime.now() - dict_of_voice_times.get(member.name)[0]
-#                 dict_of_voice_times.get(member.name)[1] = dict_of_voice_times.get(member.name)[1] + difference
-#                 print(dict_of_voice_times.get(member.name)[1])
-
-
 @client.event
 async def on_voice_state_update(member, before, after):
-    for each in dict_of_members:
-        print(dict_of_members.get(each).voice)
+    if after.channel:
+        if not before.channel:
+            dict_of_voice_times.get(member.name).timer_begin()
+    else:
+        if before.channel:
+            dict_of_voice_times.get(member.name).timer_end()
+
+    print(str(member.name) + " ——— " + str(dict_of_voice_times.get(member.name).total_time))
 
 
 if __name__ == "__main__":
