@@ -6,6 +6,7 @@ from datetime import datetime
 
 import discord
 from dotenv import load_dotenv
+import sqlite3
 
 
 class VoiceTimer:
@@ -130,6 +131,15 @@ async def on_ready():
         dict_of_voice_times[each] = VoiceTimer()
         if dict_of_members.get(each).voice:
             dict_of_voice_times.get(each).timer_begin()
+
+    db = sqlite3.connect('mydb')
+    cursor = db.cursor()
+    cursor.execute('''
+        CREATE TABLE users(id INTEGER PRIMARY KEY, name TEXT,
+                           time DATETIME, date DATE)
+    ''')
+    db.commit()
+    db.close()
 
     print(f'{client.user.name} has connected to Discord!')
 
